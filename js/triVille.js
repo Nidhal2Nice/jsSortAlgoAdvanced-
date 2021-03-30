@@ -61,8 +61,22 @@ function getArrayCsv(csv) {
  * @returns la distance qui sépare la ville de Grenoble
  */
 function distanceFromGrenoble(ville) {
+    let lat2 = ville.latitude;
+    let lon2 = ville.longitude;
+    const R = 6371e3; // metres
+    const φ1 = 45.188529 * Math.PI/180; // φ, λ in radians
+    const φ2 = lat2 * Math.PI/180;
+    const Δφ = (lat2-45.188529) * Math.PI/180;
+    const Δλ = (lon2-5.724524) * Math.PI/180;
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    const d = R * c; // in metres
     console.log('implement me !');
-    return 0;
+    return d;
 }
 
 /**
@@ -73,8 +87,12 @@ function distanceFromGrenoble(ville) {
  * @return vrai si la ville i est plus proche
  */
 function isLess(i, j) {
+    const distance_i = i.distanceFromGrenoble;
+    const distance_j = j.distanceFromGrenoble;
+    if(distance_i > distance_j) {
+        return true;
+    }
     console.log('implement me !');
-    return true;
 }
 
 /**
@@ -82,29 +100,32 @@ function isLess(i, j) {
  * @param {*} i 
  * @param {*} j 
  */
-function swap(i, j) {
+function swap(table, i, j) {
+    const temp = tab[i].distanceFromGrenoble;
+    tab[i].distanceFromGrenoble = tab[j].distanceFromGrenoble;
+    tab[j].distanceFromGrenoble = temp;
     console.log('implement me !');
 }
 
 function sort(type) {
     switch (type) {
         case 'insert':
-            insertsort();
+            insertsort(listVille);
             break;
         case 'select':
-            selectionsort();
+            selectionsort(listVille);
             break;
         case 'bubble':
-            bubblesort();
+            bubblesort(listVille);
             break;
         case 'shell':
-            shellsort();
+            shellsort(listVille);
             break;
         case 'merge':
-            mergesort();
+            mergesort(listVille);
             break;
         case 'heap':
-            heapsort();
+            heapsort(listVille);
             break;
         case 'quick':
             quicksort();
@@ -112,9 +133,20 @@ function sort(type) {
     }
 }
 
-function insertsort() {
-    console.log("insertsort - implement me !");
-}
+function insertsort(table) {
+        let n = table.length;
+        for (i = 1; i < n; i++) {
+            temp = table[i].distanceFromGrenoble;
+            j = i - 1;
+            while (j > 0 && table[j].distanceFromGrenoble > temp) {
+                table[j + 1].distanceFromGrenoble = table[j].distanceFromGrenoble;
+                j--;
+            }
+            table[j + 1].distanceFromGrenoble = temp;
+        }
+    }
+    return table
+    // console.log("insertsort - implement me !");
 
 function selectionsort() {
     console.log("selectionsort - implement me !");
